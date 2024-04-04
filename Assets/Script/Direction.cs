@@ -2,55 +2,59 @@ using UnityEngine;
 
 public class Direction : MonoBehaviour
 {
-    public GameObject circleObject;
-    private SpriteRenderer[] spriteRenderers;
-    private Color endColor;
-    public float colorChangeTime;
-    private int currentIndex = 0; // Track the current index of the child object
+    private GameObject ballGameObject; // Variable to hold the GameObject reference
+    public Transform ballTransform;
+    [SerializeField]
+    private float rotationSpeed;
+    private SpriteRenderer[] spritesDirection;
 
-    void Start()
+
+    private void Start()
     {
-        if (circleObject != null)
-        {
-            spriteRenderers = circleObject.GetComponentsInChildren<SpriteRenderer>();
-        }
-        else
-        {
-            Debug.LogError("circleObject is not assigned!");
-        }
-
-        endColor = Color.red;
+        // Getting a reference to the GameObject this script is attached to
+        ballGameObject = gameObject;
+        spritesDirection = ballGameObject.GetComponentsInChildren<SpriteRenderer>();
     }
 
-    void Update()
+    private void Update()
     {
-        if (spriteRenderers != null && spriteRenderers.Length > 0)
+       
+
+        if(!Input.GetMouseButton(0))
         {
-            // Check if currentIndex is within bounds
-            if (currentIndex < spriteRenderers.Length)
-            {
-                // Get the current SpriteRenderer
-                SpriteRenderer currentRenderer = spriteRenderers[currentIndex];
-
-                // Change color of the current SpriteRenderer
-                currentRenderer.color = Color.Lerp(currentRenderer.color, endColor, colorChangeTime * Time.fixedDeltaTime);
-
-                // Check if the color change is almost complete for the current SpriteRenderer
-                if (currentRenderer.color == endColor || Vector4.Distance(currentRenderer.color, endColor) < 0.01f)
-                {
-                    // Move to the next child object
-                    currentIndex++;
-                }
-            }
-            else
-            {
-                // Reset currentIndex to restart the color filling process
-                currentIndex = 0;
-            }
+            Rotation();
         }
+
         else
         {
-            Debug.LogWarning("No SpriteRenderers found on child GameObjects of circleObject!");
+           ChangeColor();
         }
+    }
+
+
+    void Rotation()
+    {
+        float angle = transform.rotation.eulerAngles.z;
+
+        Debug.Log(angle);
+
+        rotationSpeed = angle > 90 ? -rotationSpeed : angle < 1 ? rotationSpeed : rotationSpeed;
+
+        if (ballGameObject != null)
+        {
+            transform.RotateAround(ballTransform.position, new Vector3(0, 0, 1), rotationSpeed * Time.deltaTime);
+        }
+    }
+
+
+    void  ChangeColor()
+    {
+        if(spritesDirection!= null) {
+            foreach (SpriteRenderer renderer in spritesDirection)
+            {
+                renderer.color = Color.red;
+            }
+        }
+       
     }
 }
