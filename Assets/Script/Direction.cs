@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Direction : MonoBehaviour
@@ -6,7 +7,11 @@ public class Direction : MonoBehaviour
     public Transform ballTransform;
     [SerializeField]
     private float rotationSpeed;
+
+    [SerializeField]
+    private float colorChangeDelay;
     private SpriteRenderer[] spritesDirection;
+    
 
 
     private void Start()
@@ -49,12 +54,20 @@ public class Direction : MonoBehaviour
 
     void  ChangeColor()
     {
-        if(spritesDirection!= null) {
-            foreach (SpriteRenderer renderer in spritesDirection)
+        StartCoroutine(ChangeColorCoroutine());
+    }
+
+
+    IEnumerator ChangeColorCoroutine()
+    {
+
+        if (spritesDirection != null)
+        {
+            for (int i = 0; i < spritesDirection.Length; i++)
             {
-                renderer.color = Color.red;
+                spritesDirection[i].color = Color.red;
+                yield return new WaitForSeconds(colorChangeDelay);
             }
         }
-       
     }
 }
