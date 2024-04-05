@@ -1381,8 +1381,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2018213867}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.008726558, w: 0.999962}
-  m_LocalPosition: {x: -3.9172525, y: -2.08, z: 0.049771216}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.9172525, y: -2.08, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1392,7 +1392,7 @@ Transform:
   - {fileID: 1316726878}
   - {fileID: 386096383}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2018213869
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1405,8 +1405,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58b9c40f9d5dd2d438322098d6d1bc99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  circleObject: {fileID: 2018213867}
-  colorChangeTime: 0.2
+  ballTransform: {fileID: 397259323}
+  rotationSpeed: 30
+  colorChangeDelay: 0.2
 --- !u!1 &2065326259
 GameObject:
   m_ObjectHideFlags: 0

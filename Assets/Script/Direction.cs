@@ -7,12 +7,13 @@ public class Direction : MonoBehaviour
     public Transform ballTransform;
     [SerializeField]
     private float rotationSpeed;
+    private float rotationAngle;
 
     [SerializeField]
     private float colorChangeDelay;
     private SpriteRenderer[] spritesDirection;
-    
-
+    private int spriteDirectionIndex;
+    private bool isMouseClickHeld;
 
     private void Start()
     {
@@ -33,17 +34,30 @@ public class Direction : MonoBehaviour
         else
         {
            ChangeColor();
+           isMouseClickHeld = true;
+          
         }
+
+
+        if(isMouseClickHeld && !Input.GetMouseButton(0))
+        {
+            float angleRadians = rotationAngle * Mathf.Deg2Rad;
+
+            Vector3 direction = new Vector3(Mathf.Sin(angleRadians), 0, Mathf.Cos(angleRadians));
+
+            ballTransform.position += direction * (spriteDirectionIndex + 20) * Time.deltaTime;
+        }
+        
     }
 
 
     void Rotation()
     {
-        float angle = transform.rotation.eulerAngles.z;
+        rotationAngle = transform.rotation.eulerAngles.z;
 
-        Debug.Log(angle);
+        Debug.Log(rotationAngle);
 
-        rotationSpeed = angle > 90 ? -rotationSpeed : angle < 1 ? rotationSpeed : rotationSpeed;
+        rotationSpeed = rotationAngle > 90 ? -rotationSpeed : rotationAngle < 1 ? rotationSpeed : rotationSpeed;
 
         if (ballGameObject != null)
         {
@@ -60,14 +74,44 @@ public class Direction : MonoBehaviour
 
     IEnumerator ChangeColorCoroutine()
     {
-
-        if (spritesDirection != null)
+        if (spritesDirection != null && spritesDirection.Length > 0)
         {
-            for (int i = 0; i < spritesDirection.Length; i++)
+            int i = 0;
+            bool movingForward = true;
+
+            while (Input.GetMouseButton(0))
             {
-                spritesDirection[i].color = Color.red;
+                // If moving forward, set color to red
+                if (movingForward)
+                {
+                    spritesDirection[i].color = Color.red;
+                    i++;
+
+                    // If reached the top, start moving backward
+                    if (i >= spritesDirection.Length)
+                    {
+                        movingForward = false;
+                        i = spritesDirection.Length - 1;
+                    }
+                }
+                else // If moving backward, set color to white
+                {
+                    spritesDirection[i].color = Color.white;
+                    i--;
+
+                    // If reached the bottom, start moving forward
+                    if (i < 0)
+                    {
+                        movingForward = true;
+                        i = 0;
+                    }
+                }
+                spriteDirectionIndex = i;
                 yield return new WaitForSeconds(colorChangeDelay);
             }
         }
     }
+
+
+
 }
