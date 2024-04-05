@@ -15,6 +15,8 @@ public class Direction : MonoBehaviour
     private int spriteDirectionIndex;
     private bool isMouseClickHeld;
 
+    public Rigidbody2D rb;
+
     private void Start()
     {
         // Getting a reference to the GameObject this script is attached to
@@ -41,11 +43,13 @@ public class Direction : MonoBehaviour
 
         if(isMouseClickHeld && !Input.GetMouseButton(0))
         {
+            float speed = spriteDirectionIndex + 18;
             float angleRadians = rotationAngle * Mathf.Deg2Rad;
-
-            Vector3 direction = new Vector3(Mathf.Sin(angleRadians), 0, Mathf.Cos(angleRadians));
-
-            ballTransform.position += direction * (spriteDirectionIndex + 20) * Time.deltaTime;
+            Debug.Log(angleRadians);
+            Vector3 direction = new Vector3(Mathf.Cos(angleRadians),  Mathf.Sin(angleRadians),0).normalized;
+            Debug.Log(direction);
+            rb.velocity= direction * (speed*speed) * Time.deltaTime;
+            isMouseClickHeld = false;
         }
         
     }
@@ -55,7 +59,6 @@ public class Direction : MonoBehaviour
     {
         rotationAngle = transform.rotation.eulerAngles.z;
 
-        Debug.Log(rotationAngle);
 
         rotationSpeed = rotationAngle > 90 ? -rotationSpeed : rotationAngle < 1 ? rotationSpeed : rotationSpeed;
 
@@ -112,6 +115,6 @@ public class Direction : MonoBehaviour
         }
     }
 
-
+    
 
 }
